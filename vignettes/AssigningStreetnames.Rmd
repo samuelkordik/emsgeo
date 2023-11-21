@@ -1,0 +1,84 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(tidyverse)
+library(sf)
+
+mvcs <- read_csv(here::here("data/MVCs_Export.csv"))
+
+mvcs %>% filter(!is.na(`Scene GPS Latitude Encoded (eScene.11)`)) %>% head()
+
+```
+```{r}
+streets <- st_read(here::here("data/STREETS 2/STREETS.shp"), layer = "STREETS")
+
+streets %>% filter(CLASS != "MINOR ARTERIAL",
+                   CLASS != "RAMP",
+                   CLASS != "PRIVATE",
+                   CLASS != "WALKWAY",
+                   CLASS != "PAPER",
+                   CLASS != "CAD ONLY") %>% ggplot() +
+  geom_sf(
+    aes(color = CLASS)
+  ) +
+  theme_bw() +
+  coord_sf()
+
+```
+```{r}
+mvcs_loc <- mvcs %>% filter(!is.na(`Scene GPS Latitude Encoded (eScene.11)`),!is.na(`Scene GPS Longitude Encoded (eScene.11)`)) %>% 
+  select(response_number = `Response EMS Response Number (eResponse.04)`, 
+         incident_datetime = `Incident Date Time`, 
+         latitude = `Scene GPS Latitude Encoded (eScene.11)`, 
+         longitude = `Scene GPS Longitude Encoded (eScene.11)`)
+
+mv_st <- st_as_sf(mvcs_loc, agr = c(response_number = 'identity',
+                                    incident_datetime = 'aggregrate'),
+                  coords = c("latitude", "longitude"),
+                  crs = "EPSG:2276")
+
+mv_st %>% ggplot() + geom_sf()
+```
+```{r}
+streets %>% filter(CLASS != "MINOR ARTERIAL",
+                   CLASS != "RAMP",
+                   CLASS != "PRIVATE",
+                   CLASS != "WALKWAY",
+                   CLASS != "PAPER",
+                   CLASS != "CAD ONLY") %>% 
+  st_buffer(dist = 100, endCapStyle = "FLAT") %>% 
+  ggplot() +
+  geom_sf(
+    aes(color = CLASS)
+  ) +
+  theme_bw() +
+  coord_sf()
+```
+```{r}
+mv_st_slice <- mv_st %>% head(100)
+
+merged <- st_join(mv_st_slice,
+                  st_buffer(streets, dist = 100, endCapStyle = "FLAT"),
+                  st_is_within_distance,
+                  dist = units::set_units(100, "m"))
+
+```
+```{r fig.height=12, fig.width=15}
+library(tmap)
+
+major_streets <- streets %>% filter(CLASS != "MINOR ARTERIAL",
+                   CLASS != "RAMP",
+                   CLASS != "PRIVATE",
+                   CLASS != "WALKWAY",
+                   CLASS != "PAPER",
+                   CLASS != "CAD ONLY")
+
+tmap_mode("view")
+
+tm_basemap("Esri.WorldImagery") +
+  tm_shape(major_streets) + tm_lines("CLASS") +
+  tm_shape(mv_st) + tm_dots()
+```
+

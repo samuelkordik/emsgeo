@@ -1,0 +1,20 @@
+Package: emsgeo
+Type: Package
+Title: Functions for mapping and adding geography information to EMS data
+Version: 0.1.0
+Author: Samuel Kordik
+Maintainer: Samuel Kordik <samuel.kordik@utsouthwestern.edu>
+Description: Simple package to work with EMS data and tie to geographical information.
+    Initially, simply takes street shapefiles (from city planning/open data sources), 
+    then adds that street-level information to EMS incidents within a certain distance.
+License: use_mit_license()
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.3
+Imports: 
+    dplyr,
+    lubridate,
+    magrittr,
+    readr,
+    rlang,
+    sf
