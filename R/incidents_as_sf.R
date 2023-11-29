@@ -21,7 +21,8 @@ incidents_as_sf <- function(incidents, coords = c("scene_lon", "scene_lat"), crs
   lat = rlang::sym(coords[2])
 
   incidents %>% tidyr::drop_na(!!lon, !!lat) %>%
-    sf::st_as_sf(coords = coords, crs = 4326)
+    sf::st_as_sf(coords = coords, crs = 4326,
+                 remove = FALSE)
 
   #sf::st_transform(sf_incidents, crs = 2276)
 }
