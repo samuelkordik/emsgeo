@@ -24,9 +24,24 @@ read_mvc_data <- function(filename = here::here("../data/MVCs_Export.csv")) {
                                                           scene_lon2 = readr::col_double(),
                                                           .default = readr::col_character()
                                                           ))
-  # Convert datetimes
 
-  df <- df %>% dplyr::mutate_at(vars(dplyr::ends_with("_datetime")),lubridate::mdy_hms)
+  # Fix NA values in datetimes
+  df <- df %>% dplyr::mutate(dplyr::across(dplyr::ends_with("_datetime"),
+                                 ~ replace(.x,
+                                          .x %in% c("Not Applicable",
+                                                   "Not Recorded",
+                                                   "PatientArrivalDateTimeModifier_NotValue_NotApplicable"),
+                                          NA)))
+
+  # Convert datetimes
+  df <- df %>% dplyr::mutate(dplyr::across(dplyr::ends_with("_datetime"),
+                                             ~lubridate::parse_date_time(.x,
+                                                                         c("mdY IMSp",
+                                                                           "mdY IMp"
+                                                                           ),
+                                                                         tz = "America/Chicago")))
+  # Using lubridate::parse_date_time due to multiple formats in ImageTrend bulk exports
+
 
   # Add intervals
   df <- df %>%
@@ -37,8 +52,21 @@ read_mvc_data <- function(filename = here::here("../data/MVCs_Export.csv")) {
                   chute_interval = int_len(dispatched_datetime, enroute_datetime)
                   )
 
+  # Remove outlier/wrong intervals; adjust intervals that are within 60 seconds up to 0.
+  df <- df %>%
+    dplyr::mutate(dplyr::across(dplyr::ends_with("_interval"),
+                                ~ replace(.x,
+                                          .x < -60,
+                                          NA))) %>%
+    dplyr::mutate(dplyr::across(dplyr::ends_with("_interval"),
+                                ~ replace(.x,
+                                          .x < 0,
+                                          0)))
+
+
   df
 }
+
 
 #' Get the duration in seconds between two points in time
 #'
