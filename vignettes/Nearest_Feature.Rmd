@@ -1,0 +1,31 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(future)
+library(tidyverse)
+library(tictoc)
+library(sfurrr)
+
+mvcs_filename <- here::here("../data/MVCs_Export.csv")
+streets_filename <- here::here("../data/STREETS 2/STREETS.shp")
+streets_layer <- "STREETS"
+mvc_coords = c("scene_lon", "scene_lat")
+
+mvcs <- read_mvc_data(mvcs_filename)
+streets <- get_streets(streets_filename, streets_layer)
+incidents_sf <- incidents_as_sf(mvcs, coords = mvc_coords)
+
+tic()
+processed <- sf::st_join(
+  incidents_as_sf(mvcs, coords = mvc_coords) %>% sf::st_transform(crs = epsg_crs), 
+  streets, 
+  join = sf::st_nearest_feature)
+toc()
+
+write_csv(as.data.frame(processed),
+          here::here("../data/processed.csv"),
+          append = FALSE)
+```
+

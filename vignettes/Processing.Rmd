@@ -1,0 +1,102 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(tidyverse)
+
+mvcs_filename <- here::here("../data/MVCs_Export.csv")
+streets_filename <- here::here("../data/STREETS 2/STREETS.shp")
+streets_layer <- "STREETS"
+mvc_coords = c("scene_lon", "scene_lat")
+distance <- units::set_units(10, "m")
+
+mvcs <- read_mvc_data(mvcs_filename)
+streets <- get_streets(streets_filename, streets_layer)
+incidents_sf <- incidents_as_sf(mvcs, coords = mvc_coords)
+
+# Parse MVCs by year
+mvcs %>% count(year(incident_datetime))
+```
+
+```{r}
+mvcs_2023 <- mvcs %>% filter(year(incident_datetime) == 2023)
+
+mvcs_2022 <- mvcs %>% filter(year(incident_datetime) == 2022)
+
+mvcs_2021 <- mvcs %>% filter(year(incident_datetime) == 2021)
+
+mvcs_2020 <- mvcs %>% filter(year(incident_datetime) == 2020)
+mvcs_2019 <- mvcs %>% filter(year(incident_datetime) == 2019)
+mvcs_2018 <- mvcs %>% filter(year(incident_datetime) == 2018)
+mvcs_2017 <- mvcs %>% filter(year(incident_datetime) == 2017)
+mvcs_2016 <- mvcs %>% filter(year(incident_datetime) == 2016)
+
+
+epsg_crs <- sf::st_crs(streets)$epsg
+library(future)
+library(tictoc)
+plan(multisession)
+
+tic()
+processed_2022 <- future_st_join(
+  incidents_as_sf(mvcs_2022, coords = mvc_coords) %>% sf::st_transform(crs = epsg_crs), streets, join = sf::st_is_within_distance,
+  dist = distance)
+toc()
+tic()
+processed_2021 <- future_st_join(
+  incidents_as_sf(mvcs_2021, coords = mvc_coords) %>% sf::st_transform(crs = epsg_crs), streets, join = sf::st_is_within_distance,
+  dist = distance)
+toc()
+tic()
+processed_2020 <- future_st_join(
+  incidents_as_sf(mvcs_2020, coords = mvc_coords) %>% sf::st_transform(crs = epsg_crs), streets, join = sf::st_is_within_distance,
+  dist = distance)
+toc()
+tic()
+processed_2019 <- future_st_join(
+  incidents_as_sf(mvcs_2019, coords = mvc_coords) %>% sf::st_transform(crs = epsg_crs), streets, join = sf::st_is_within_distance,
+  dist = distance)
+toc()
+tic()
+processed_2018 <- future_st_join(
+  incidents_as_sf(mvcs_2018, coords = mvc_coords) %>% sf::st_transform(crs = epsg_crs), streets, join = sf::st_is_within_distance,
+  dist = distance)
+toc()
+tic()
+processed_2017 <- future_st_join(
+  incidents_as_sf(mvcs_2017, coords = mvc_coords) %>% sf::st_transform(crs = epsg_crs), streets, join = sf::st_is_within_distance,
+  dist = distance)
+toc()
+tic()
+processed_2016 <- future_st_join(
+  incidents_as_sf(mvcs_2016, coords = mvc_coords) %>% sf::st_transform(crs = epsg_crs), streets, join = sf::st_is_within_distance,
+  dist = distance)
+toc()
+
+```
+
+```{r}
+# Parallelized
+ remotes::install_github('h-a-graham/sfurrr')
+library(sfurrr)
+
+epsg_crs <- sf::st_crs(streets)$epsg
+# merged <- merge_mvcs_streets(incidents_sf, streets, distance = merge_distance)
+
+library(tictoc)
+plan(multisession)
+
+tic()
+sf_incidents <- incidents_sf
+processed <- st_join(sf_incidents %>% sf::st_transform(crs = epsg_crs),
+              streets,
+              join = sf::st_is_within_distance,
+              dist = distance)  
+toc()
+
+write_csv(as.data.frame(processed),
+          here::here("../data/processed.csv"),
+          append = FALSE)
+  
+```

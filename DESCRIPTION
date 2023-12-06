@@ -7,14 +7,18 @@ Maintainer: Samuel Kordik <samuel.kordik@utsouthwestern.edu>
 Description: Simple package to work with EMS data and tie to geographical information.
     Initially, simply takes street shapefiles (from city planning/open data sources), 
     then adds that street-level information to EMS incidents within a certain distance.
-License: use_mit_license()
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
 Imports: 
     dplyr,
+    here,
     lubridate,
     magrittr,
+    parallel,
     readr,
     rlang,
-    sf
+    sf,
+    tidyr,
+    units
