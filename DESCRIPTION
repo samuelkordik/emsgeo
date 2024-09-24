@@ -3,19 +3,19 @@ Type: Package
 Title: Functions for mapping and adding geography information to EMS data
 Version: 0.1.0
 Author: Samuel Kordik
-Maintainer: Samuel Kordik <samuel.kordik@utsouthwestern.edu>
+Maintainer: Samuel Kordik <samuel@samuelkordik.com>
 Description: Simple package to work with EMS data and tie to geographical information.
     Initially, simply takes street shapefiles (from city planning/open data sources), 
     then adds that street-level information to EMS incidents within a certain distance.
-License: MIT + file LICENSE
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
 Imports: 
     dplyr,
+    ggplot2,
     here,
     lubridate,
-    magrittr,
     parallel,
     readr,
     rlang,

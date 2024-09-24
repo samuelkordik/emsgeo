@@ -4,7 +4,7 @@
 \alias{read_mvc_data}
 \title{Read MVC Incident Data}
 \usage{
-read_mvc_data(filename = here::here("data/MVCs_Export.csv"))
+read_mvc_data(filename = here::here("../data/MVCs_Export.csv"))
 }
 \arguments{
 \item{filename}{Filename of data to pull in.}

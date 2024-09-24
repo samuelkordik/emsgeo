@@ -1754,44 +1754,100 @@ display: none;
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6OSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyI5IMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBMTFRVFV2RFFCU2NKbzBsZ1ZiQmczOUJEOG1sQ0o2a3FIZ1ZSS0Y0a1RWWk5aaHVTcnBGUGZsQkQxVThlRkR3SUJUOGRSNjg2Nm54N1dZWE5JSGRtWDI4TjI4bSt6djlidEFQQUxob3VnMjRIbEY0aHdlNzRRYlFkT2pSUUJPK3dpdHFXaWFpaWgwNmZtOTJxN3JSbTAwTVRnMCtHWHcyK0dMd3plQzd4cHNmZGJjKzZHb3JQV0J2RTNna090a0dIcmFBK3k3dytnbmNmUUZIZlczbXZ5bFBzQUVmRVZuU3hxcml5alZueFdvcTRqVGhRaDRuVEhLWkR2aWFEU0pxSW42UlgwWldTRGx4Vks2eUxML3IyK0tNamV3Mld3eEluMFduQmMzVGExNGJhZVZEbWVhQ2hoejE3N3phY0tPb0ZSYkhRamxKd3ZoOExDN0NkYldneXEyL3R1SCtIKzVVSzUzU1NIbEdhb0dMczFSdzZ6MWpKend6anc0bDFvR2pZWkVLYVpOUWRSVEpYRExiRjhSNVppczZHK2EvYnYxVVB6SUNBQUE9In0= -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["year(incident_datetime)"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"2016","2":"20286"},{"1":"2017","2":"35328"},{"1":"2018","2":"33859"},{"1":"2019","2":"35138"},{"1":"2020","2":"33331"},{"1":"2021","2":"38376"},{"1":"2022","2":"33260"},{"1":"2023","2":"23128"},{"1":"NA","2":"1"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[9]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGljKClcbnByb2Nlc3NlZF8yMDIzIDwtIGZ1dHVyZV9zdF9qb2luKFxuICBpbmNpZGVudHNfYXNfc2YobXZjc18yMDIzLCBjb29yZHMgPSBtdmNfY29vcmRzKSAlPiUgc2Y6OnN0X3RyYW5zZm9ybShjcnMgPSBlcHNnX2NycyksIHN0cmVldHMsIGpvaW4gPSBzZjo6c3RfaXNfd2l0aGluX2Rpc3RhbmNlLFxuICBkaXN0ID0gZGlzdGFuY2UpXG50b2MoKVxuXG5gYGAifQ== -->
-<pre class="r"><code>tic()
-processed_2023 &lt;- future_st_join(
-  incidents_as_sf(mvcs_2023, coords = mvc_coords) %&gt;% sf::st_transform(crs = epsg_crs), streets, join = sf::st_is_within_distance,
-  dist = distance)
-toc()
-</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiNDIyLjk5IHNlYyBlbGFwc2VkXG4ifQ== -->
-<pre><code>422.99 sec elapsed</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShzZnVycnIpXG5cbmBgYCJ9 -->
-<pre class="r"><code>library(sfurrr)
-</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiBzZlxuTGlua2luZyB0byBHRU9TIDMuMTEuMCwgR0RBTCAzLjUuMywgUFJPSiA5LjEuMDtcbnNmX3VzZV9zMigpIGlzIFRSVUVcbiJ9 -->
-<pre><code>Loading required package: sf
-Linking to GEOS 3.11.0, GDAL 3.5.3, PROJ 9.1.0;
-sf_use_s2() is TRUE</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KHNmKVxuXG5tdmNzIDwtIHJlYWRfY3N2KGhlcmU6OmhlcmUoXCJkYXRhL01WQ3NfRXhwb3J0LmNzdlwiKSlcblxubXZjcyB8PiAgZmlsdGVyKCFpcy5uYShgU2NlbmUgR1BTIExhdGl0dWRlIEVuY29kZWQgKGVTY2VuZS4xMSlgKSkgfD4gIGhlYWQoKVxuXG5gYGAifQ== -->
+<pre class="r"><code>library(tidyverse)
+library(sf)
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQpgYGB7cn0KbGlicmFyeSh0aWR5dmVyc2UpCgptdmNzX2ZpbGVuYW1lIDwtIGhlcmU6OmhlcmUoIi4uL2RhdGEvTVZDc19FeHBvcnQuY3N2IikKc3RyZWV0c19maWxlbmFtZSA8LSBoZXJlOjpoZXJlKCIuLi9kYXRhL1NUUkVFVFMgMi9TVFJFRVRTLnNocCIpCnN0cmVldHNfbGF5ZXIgPC0gIlNUUkVFVFMiCm12Y19jb29yZHMgPSBjKCJzY2VuZV9sb24iLCAic2NlbmVfbGF0IikKZGlzdGFuY2UgPC0gdW5pdHM6OnNldF91bml0cygxMCwgIm0iKQoKbXZjcyA8LSByZWFkX212Y19kYXRhKG12Y3NfZmlsZW5hbWUpCnN0cmVldHMgPC0gZ2V0X3N0cmVldHMoc3RyZWV0c19maWxlbmFtZSwgc3RyZWV0c19sYXllcikKaW5jaWRlbnRzX3NmIDwtIGluY2lkZW50c19hc19zZihtdmNzLCBjb29yZHMgPSBtdmNfY29vcmRzKQoKIyBQYXJzZSBNVkNzIGJ5IHllYXIKbXZjcyAlPiUgY291bnQoeWVhcihpbmNpZGVudF9kYXRldGltZSkpCmBgYAoKYGBge3J9Cm12Y3NfMjAyMyA8LSBtdmNzICU+JSBmaWx0ZXIoeWVhcihpbmNpZGVudF9kYXRldGltZSkgPT0gMjAyMykKCm12Y3NfMjAyMiA8LSBtdmNzICU+JSBmaWx0ZXIoeWVhcihpbmNpZGVudF9kYXRldGltZSkgPT0gMjAyMikKCm12Y3NfMjAyMSA8LSBtdmNzICU+JSBmaWx0ZXIoeWVhcihpbmNpZGVudF9kYXRldGltZSkgPT0gMjAyMSkKCm12Y3NfMjAyMCA8LSBtdmNzICU+JSBmaWx0ZXIoeWVhcihpbmNpZGVudF9kYXRldGltZSkgPT0gMjAyMCkKbXZjc18yMDE5IDwtIG12Y3MgJT4lIGZpbHRlcih5ZWFyKGluY2lkZW50X2RhdGV0aW1lKSA9PSAyMDE5KQptdmNzXzIwMTggPC0gbXZjcyAlPiUgZmlsdGVyKHllYXIoaW5jaWRlbnRfZGF0ZXRpbWUpID09IDIwMTgpCm12Y3NfMjAxNyA8LSBtdmNzICU+JSBmaWx0ZXIoeWVhcihpbmNpZGVudF9kYXRldGltZSkgPT0gMjAxNykKbXZjc18yMDE2IDwtIG12Y3MgJT4lIGZpbHRlcih5ZWFyKGluY2lkZW50X2RhdGV0aW1lKSA9PSAyMDE2KQoKCmVwc2dfY3JzIDwtIHNmOjpzdF9jcnMoc3RyZWV0cykkZXBzZwpsaWJyYXJ5KGZ1dHVyZSkKbGlicmFyeSh0aWN0b2MpCnBsYW4obXVsdGlzZXNzaW9uKQoKdGljKCkKcHJvY2Vzc2VkXzIwMjIgPC0gZnV0dXJlX3N0X2pvaW4oCiAgaW5jaWRlbnRzX2FzX3NmKG12Y3NfMjAyMiwgY29vcmRzID0gbXZjX2Nvb3JkcykgJT4lIHNmOjpzdF90cmFuc2Zvcm0oY3JzID0gZXBzZ19jcnMpLCBzdHJlZXRzLCBqb2luID0gc2Y6OnN0X2lzX3dpdGhpbl9kaXN0YW5jZSwKICBkaXN0ID0gZGlzdGFuY2UpCnRvYygpCnRpYygpCnByb2Nlc3NlZF8yMDIxIDwtIGZ1dHVyZV9zdF9qb2luKAogIGluY2lkZW50c19hc19zZihtdmNzXzIwMjEsIGNvb3JkcyA9IG12Y19jb29yZHMpICU+JSBzZjo6c3RfdHJhbnNmb3JtKGNycyA9IGVwc2dfY3JzKSwgc3RyZWV0cywgam9pbiA9IHNmOjpzdF9pc193aXRoaW5fZGlzdGFuY2UsCiAgZGlzdCA9IGRpc3RhbmNlKQp0b2MoKQp0aWMoKQpwcm9jZXNzZWRfMjAyMCA8LSBmdXR1cmVfc3Rfam9pbigKICBpbmNpZGVudHNfYXNfc2YobXZjc18yMDIwLCBjb29yZHMgPSBtdmNfY29vcmRzKSAlPiUgc2Y6OnN0X3RyYW5zZm9ybShjcnMgPSBlcHNnX2NycyksIHN0cmVldHMsIGpvaW4gPSBzZjo6c3RfaXNfd2l0aGluX2Rpc3RhbmNlLAogIGRpc3QgPSBkaXN0YW5jZSkKdG9jKCkKdGljKCkKcHJvY2Vzc2VkXzIwMTkgPC0gZnV0dXJlX3N0X2pvaW4oCiAgaW5jaWRlbnRzX2FzX3NmKG12Y3NfMjAxOSwgY29vcmRzID0gbXZjX2Nvb3JkcykgJT4lIHNmOjpzdF90cmFuc2Zvcm0oY3JzID0gZXBzZ19jcnMpLCBzdHJlZXRzLCBqb2luID0gc2Y6OnN0X2lzX3dpdGhpbl9kaXN0YW5jZSwKICBkaXN0ID0gZGlzdGFuY2UpCnRvYygpCnRpYygpCnByb2Nlc3NlZF8yMDE4IDwtIGZ1dHVyZV9zdF9qb2luKAogIGluY2lkZW50c19hc19zZihtdmNzXzIwMTgsIGNvb3JkcyA9IG12Y19jb29yZHMpICU+JSBzZjo6c3RfdHJhbnNmb3JtKGNycyA9IGVwc2dfY3JzKSwgc3RyZWV0cywgam9pbiA9IHNmOjpzdF9pc193aXRoaW5fZGlzdGFuY2UsCiAgZGlzdCA9IGRpc3RhbmNlKQp0b2MoKQp0aWMoKQpwcm9jZXNzZWRfMjAxNyA8LSBmdXR1cmVfc3Rfam9pbigKICBpbmNpZGVudHNfYXNfc2YobXZjc18yMDE3LCBjb29yZHMgPSBtdmNfY29vcmRzKSAlPiUgc2Y6OnN0X3RyYW5zZm9ybShjcnMgPSBlcHNnX2NycyksIHN0cmVldHMsIGpvaW4gPSBzZjo6c3RfaXNfd2l0aGluX2Rpc3RhbmNlLAogIGRpc3QgPSBkaXN0YW5jZSkKdG9jKCkKdGljKCkKcHJvY2Vzc2VkXzIwMTYgPC0gZnV0dXJlX3N0X2pvaW4oCiAgaW5jaWRlbnRzX2FzX3NmKG12Y3NfMjAxNiwgY29vcmRzID0gbXZjX2Nvb3JkcykgJT4lIHNmOjpzdF90cmFuc2Zvcm0oY3JzID0gZXBzZ19jcnMpLCBzdHJlZXRzLCBqb2luID0gc2Y6OnN0X2lzX3dpdGhpbl9kaXN0YW5jZSwKICBkaXN0ID0gZGlzdGFuY2UpCnRvYygpCgpgYGAKCmBgYHtyfQojIFBhcmFsbGVsaXplZAogcmVtb3Rlczo6aW5zdGFsbF9naXRodWIoJ2gtYS1ncmFoYW0vc2Z1cnJyJykKbGlicmFyeShzZnVycnIpCgplcHNnX2NycyA8LSBzZjo6c3RfY3JzKHN0cmVldHMpJGVwc2cKIyBtZXJnZWQgPC0gbWVyZ2VfbXZjc19zdHJlZXRzKGluY2lkZW50c19zZiwgc3RyZWV0cywgZGlzdGFuY2UgPSBtZXJnZV9kaXN0YW5jZSkKCmxpYnJhcnkodGljdG9jKQpwbGFuKG11bHRpc2Vzc2lvbikKCnRpYygpCnNmX2luY2lkZW50cyA8LSBpbmNpZGVudHNfc2YKcHJvY2Vzc2VkIDwtIHN0X2pvaW4oc2ZfaW5jaWRlbnRzICU+JSBzZjo6c3RfdHJhbnNmb3JtKGNycyA9IGVwc2dfY3JzKSwKICAgICAgICAgICAgICBzdHJlZXRzLAogICAgICAgICAgICAgIGpvaW4gPSBzZjo6c3RfaXNfd2l0aGluX2Rpc3RhbmNlLAogICAgICAgICAgICAgIGRpc3QgPSBkaXN0YW5jZSkgIAp0b2MoKQoKd3JpdGVfY3N2KGFzLmRhdGEuZnJhbWUocHJvY2Vzc2VkKSwKICAgICAgICAgIGhlcmU6OmhlcmUoIi4uL2RhdGEvcHJvY2Vzc2VkLmNzdiIpLAogICAgICAgICAgYXBwZW5kID0gRkFMU0UpCiAgCmBgYAo=</div>
+mvcs &lt;- read_csv(here::here(&quot;data/MVCs_Export.csv&quot;))
+
+mvcs |&gt;  filter(!is.na(`Scene GPS Latitude Encoded (eScene.11)`)) |&gt;  head()
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyZWV0cyA8LSBzdF9yZWFkKGhlcmU6OmhlcmUoXCJkYXRhL1NUUkVFVFMgMi9TVFJFRVRTLnNocFwiKSwgbGF5ZXIgPSBcIlNUUkVFVFNcIilcblxuc3RyZWV0cyB8PiAgZmlsdGVyKENMQVNTICE9IFwiTUlOT1IgQVJURVJJQUxcIixcbiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSBcIlJBTVBcIixcbiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSBcIlBSSVZBVEVcIixcbiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSBcIldBTEtXQVlcIixcbiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSBcIlBBUEVSXCIsXG4gICAgICAgICAgICAgICAgICAgQ0xBU1MgIT0gXCJDQUQgT05MWVwiKSAlPiUgZ2dwbG90KCkgK1xuICBnZW9tX3NmKFxuICAgIGFlcyhjb2xvciA9IENMQVNTKVxuICApICtcbiAgdGhlbWVfYncoKSArXG4gIGNvb3JkX3NmKClcblxuYGBgIn0= -->
+<pre class="r"><code>streets &lt;- st_read(here::here(&quot;data/STREETS 2/STREETS.shp&quot;), layer = &quot;STREETS&quot;)
+
+streets |&gt;  filter(CLASS != &quot;MINOR ARTERIAL&quot;,
+                   CLASS != &quot;RAMP&quot;,
+                   CLASS != &quot;PRIVATE&quot;,
+                   CLASS != &quot;WALKWAY&quot;,
+                   CLASS != &quot;PAPER&quot;,
+                   CLASS != &quot;CAD ONLY&quot;) %&gt;% ggplot() +
+  geom_sf(
+    aes(color = CLASS)
+  ) +
+  theme_bw() +
+  coord_sf()
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXZjc19sb2MgPC0gbXZjcyB8PiAgZmlsdGVyKCFpcy5uYShgU2NlbmUgR1BTIExhdGl0dWRlIEVuY29kZWQgKGVTY2VuZS4xMSlgKSwhaXMubmEoYFNjZW5lIEdQUyBMb25naXR1ZGUgRW5jb2RlZCAoZVNjZW5lLjExKWApKSAlPiUgXG4gIHNlbGVjdChyZXNwb25zZV9udW1iZXIgPSBgUmVzcG9uc2UgRU1TIFJlc3BvbnNlIE51bWJlciAoZVJlc3BvbnNlLjA0KWAsIFxuICAgICAgICAgaW5jaWRlbnRfZGF0ZXRpbWUgPSBgSW5jaWRlbnQgRGF0ZSBUaW1lYCwgXG4gICAgICAgICBsYXRpdHVkZSA9IGBTY2VuZSBHUFMgTGF0aXR1ZGUgRW5jb2RlZCAoZVNjZW5lLjExKWAsIFxuICAgICAgICAgbG9uZ2l0dWRlID0gYFNjZW5lIEdQUyBMb25naXR1ZGUgRW5jb2RlZCAoZVNjZW5lLjExKWApXG5cbm12X3N0IDwtIHN0X2FzX3NmKG12Y3NfbG9jLCBhZ3IgPSBjKHJlc3BvbnNlX251bWJlciA9ICdpZGVudGl0eScsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBpbmNpZGVudF9kYXRldGltZSA9ICdhZ2dyZWdyYXRlJyksXG4gICAgICAgICAgICAgICAgICBjb29yZHMgPSBjKFwibGF0aXR1ZGVcIiwgXCJsb25naXR1ZGVcIiksXG4gICAgICAgICAgICAgICAgICBjcnMgPSBcIkVQU0c6MjI3NlwiKVxuXG5tdl9zdCB8PiAgZ2dwbG90KCkgKyBnZW9tX3NmKClcbmBgYCJ9 -->
+<pre class="r"><code>mvcs_loc &lt;- mvcs |&gt;  filter(!is.na(`Scene GPS Latitude Encoded (eScene.11)`),!is.na(`Scene GPS Longitude Encoded (eScene.11)`)) %&gt;% 
+  select(response_number = `Response EMS Response Number (eResponse.04)`, 
+         incident_datetime = `Incident Date Time`, 
+         latitude = `Scene GPS Latitude Encoded (eScene.11)`, 
+         longitude = `Scene GPS Longitude Encoded (eScene.11)`)
+
+mv_st &lt;- st_as_sf(mvcs_loc, agr = c(response_number = &#39;identity&#39;,
+                                    incident_datetime = &#39;aggregrate&#39;),
+                  coords = c(&quot;latitude&quot;, &quot;longitude&quot;),
+                  crs = &quot;EPSG:2276&quot;)
+
+mv_st |&gt;  ggplot() + geom_sf()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyZWV0cyB8PiAgZmlsdGVyKENMQVNTICE9IFwiTUlOT1IgQVJURVJJQUxcIixcbiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSBcIlJBTVBcIixcbiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSBcIlBSSVZBVEVcIixcbiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSBcIldBTEtXQVlcIixcbiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSBcIlBBUEVSXCIsXG4gICAgICAgICAgICAgICAgICAgQ0xBU1MgIT0gXCJDQUQgT05MWVwiKSAlPiUgXG4gIHN0X2J1ZmZlcihkaXN0ID0gMTAwLCBlbmRDYXBTdHlsZSA9IFwiRkxBVFwiKSAlPiUgXG4gIGdncGxvdCgpICtcbiAgZ2VvbV9zZihcbiAgICBhZXMoY29sb3IgPSBDTEFTUylcbiAgKSArXG4gIHRoZW1lX2J3KCkgK1xuICBjb29yZF9zZigpXG5gYGAifQ== -->
+<pre class="r"><code>streets |&gt;  filter(CLASS != &quot;MINOR ARTERIAL&quot;,
+                   CLASS != &quot;RAMP&quot;,
+                   CLASS != &quot;PRIVATE&quot;,
+                   CLASS != &quot;WALKWAY&quot;,
+                   CLASS != &quot;PAPER&quot;,
+                   CLASS != &quot;CAD ONLY&quot;) %&gt;% 
+  st_buffer(dist = 100, endCapStyle = &quot;FLAT&quot;) %&gt;% 
+  ggplot() +
+  geom_sf(
+    aes(color = CLASS)
+  ) +
+  theme_bw() +
+  coord_sf()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXZfc3Rfc2xpY2UgPC0gbXZfc3QgfD4gIGhlYWQoMTAwKVxuXG5tZXJnZWQgPC0gc3Rfam9pbihtdl9zdF9zbGljZSxcbiAgICAgICAgICAgICAgICAgIHN0X2J1ZmZlcihzdHJlZXRzLCBkaXN0ID0gMTAwLCBlbmRDYXBTdHlsZSA9IFwiRkxBVFwiKSxcbiAgICAgICAgICAgICAgICAgIHN0X2lzX3dpdGhpbl9kaXN0YW5jZSxcbiAgICAgICAgICAgICAgICAgIGRpc3QgPSB1bml0czo6c2V0X3VuaXRzKDEwMCwgXCJtXCIpKVxuXG5gYGAifQ== -->
+<pre class="r"><code>mv_st_slice &lt;- mv_st |&gt;  head(100)
+
+merged &lt;- st_join(mv_st_slice,
+                  st_buffer(streets, dist = 100, endCapStyle = &quot;FLAT&quot;),
+                  st_is_within_distance,
+                  dist = units::set_units(100, &quot;m&quot;))
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0bWFwKVxuXG5tYWpvcl9zdHJlZXRzIDwtIHN0cmVldHMgfD4gIGZpbHRlcihDTEFTUyAhPSBcIk1JTk9SIEFSVEVSSUFMXCIsXG4gICAgICAgICAgICAgICAgICAgQ0xBU1MgIT0gXCJSQU1QXCIsXG4gICAgICAgICAgICAgICAgICAgQ0xBU1MgIT0gXCJQUklWQVRFXCIsXG4gICAgICAgICAgICAgICAgICAgQ0xBU1MgIT0gXCJXQUxLV0FZXCIsXG4gICAgICAgICAgICAgICAgICAgQ0xBU1MgIT0gXCJQQVBFUlwiLFxuICAgICAgICAgICAgICAgICAgIENMQVNTICE9IFwiQ0FEIE9OTFlcIilcblxudG1hcF9tb2RlKFwidmlld1wiKVxuXG50bV9iYXNlbWFwKFwiRXNyaS5Xb3JsZEltYWdlcnlcIikgK1xuICB0bV9zaGFwZShtYWpvcl9zdHJlZXRzKSArIHRtX2xpbmVzKFwiQ0xBU1NcIikgK1xuICB0bV9zaGFwZShtdl9zdCkgKyB0bV9kb3RzKClcbmBgYCJ9 -->
+<pre class="r"><code>library(tmap)
+
+major_streets &lt;- streets |&gt;  filter(CLASS != &quot;MINOR ARTERIAL&quot;,
+                   CLASS != &quot;RAMP&quot;,
+                   CLASS != &quot;PRIVATE&quot;,
+                   CLASS != &quot;WALKWAY&quot;,
+                   CLASS != &quot;PAPER&quot;,
+                   CLASS != &quot;CAD ONLY&quot;)
+
+tmap_mode(&quot;view&quot;)
+
+tm_basemap(&quot;Esri.WorldImagery&quot;) +
+  tm_shape(major_streets) + tm_lines(&quot;CLASS&quot;) +
+  tm_shape(mv_st) + tm_dots()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQpgYGB7cn0KbGlicmFyeSh0aWR5dmVyc2UpCmxpYnJhcnkoc2YpCgptdmNzIDwtIHJlYWRfY3N2KGhlcmU6OmhlcmUoImRhdGEvTVZDc19FeHBvcnQuY3N2IikpCgptdmNzIHw+ICBmaWx0ZXIoIWlzLm5hKGBTY2VuZSBHUFMgTGF0aXR1ZGUgRW5jb2RlZCAoZVNjZW5lLjExKWApKSB8PiAgaGVhZCgpCgpgYGAKYGBge3J9CnN0cmVldHMgPC0gc3RfcmVhZChoZXJlOjpoZXJlKCJkYXRhL1NUUkVFVFMgMi9TVFJFRVRTLnNocCIpLCBsYXllciA9ICJTVFJFRVRTIikKCnN0cmVldHMgfD4gIGZpbHRlcihDTEFTUyAhPSAiTUlOT1IgQVJURVJJQUwiLAogICAgICAgICAgICAgICAgICAgQ0xBU1MgIT0gIlJBTVAiLAogICAgICAgICAgICAgICAgICAgQ0xBU1MgIT0gIlBSSVZBVEUiLAogICAgICAgICAgICAgICAgICAgQ0xBU1MgIT0gIldBTEtXQVkiLAogICAgICAgICAgICAgICAgICAgQ0xBU1MgIT0gIlBBUEVSIiwKICAgICAgICAgICAgICAgICAgIENMQVNTICE9ICJDQUQgT05MWSIpICU+JSBnZ3Bsb3QoKSArCiAgZ2VvbV9zZigKICAgIGFlcyhjb2xvciA9IENMQVNTKQogICkgKwogIHRoZW1lX2J3KCkgKwogIGNvb3JkX3NmKCkKCmBgYApgYGB7cn0KbXZjc19sb2MgPC0gbXZjcyB8PiAgZmlsdGVyKCFpcy5uYShgU2NlbmUgR1BTIExhdGl0dWRlIEVuY29kZWQgKGVTY2VuZS4xMSlgKSwhaXMubmEoYFNjZW5lIEdQUyBMb25naXR1ZGUgRW5jb2RlZCAoZVNjZW5lLjExKWApKSAlPiUgCiAgc2VsZWN0KHJlc3BvbnNlX251bWJlciA9IGBSZXNwb25zZSBFTVMgUmVzcG9uc2UgTnVtYmVyIChlUmVzcG9uc2UuMDQpYCwgCiAgICAgICAgIGluY2lkZW50X2RhdGV0aW1lID0gYEluY2lkZW50IERhdGUgVGltZWAsIAogICAgICAgICBsYXRpdHVkZSA9IGBTY2VuZSBHUFMgTGF0aXR1ZGUgRW5jb2RlZCAoZVNjZW5lLjExKWAsIAogICAgICAgICBsb25naXR1ZGUgPSBgU2NlbmUgR1BTIExvbmdpdHVkZSBFbmNvZGVkIChlU2NlbmUuMTEpYCkKCm12X3N0IDwtIHN0X2FzX3NmKG12Y3NfbG9jLCBhZ3IgPSBjKHJlc3BvbnNlX251bWJlciA9ICdpZGVudGl0eScsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGluY2lkZW50X2RhdGV0aW1lID0gJ2FnZ3JlZ3JhdGUnKSwKICAgICAgICAgICAgICAgICAgY29vcmRzID0gYygibGF0aXR1ZGUiLCAibG9uZ2l0dWRlIiksCiAgICAgICAgICAgICAgICAgIGNycyA9ICJFUFNHOjIyNzYiKQoKbXZfc3QgfD4gIGdncGxvdCgpICsgZ2VvbV9zZigpCmBgYApgYGB7cn0Kc3RyZWV0cyB8PiAgZmlsdGVyKENMQVNTICE9ICJNSU5PUiBBUlRFUklBTCIsCiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSAiUkFNUCIsCiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSAiUFJJVkFURSIsCiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSAiV0FMS1dBWSIsCiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSAiUEFQRVIiLAogICAgICAgICAgICAgICAgICAgQ0xBU1MgIT0gIkNBRCBPTkxZIikgJT4lIAogIHN0X2J1ZmZlcihkaXN0ID0gMTAwLCBlbmRDYXBTdHlsZSA9ICJGTEFUIikgJT4lIAogIGdncGxvdCgpICsKICBnZW9tX3NmKAogICAgYWVzKGNvbG9yID0gQ0xBU1MpCiAgKSArCiAgdGhlbWVfYncoKSArCiAgY29vcmRfc2YoKQpgYGAKYGBge3J9Cm12X3N0X3NsaWNlIDwtIG12X3N0IHw+ICBoZWFkKDEwMCkKCm1lcmdlZCA8LSBzdF9qb2luKG12X3N0X3NsaWNlLAogICAgICAgICAgICAgICAgICBzdF9idWZmZXIoc3RyZWV0cywgZGlzdCA9IDEwMCwgZW5kQ2FwU3R5bGUgPSAiRkxBVCIpLAogICAgICAgICAgICAgICAgICBzdF9pc193aXRoaW5fZGlzdGFuY2UsCiAgICAgICAgICAgICAgICAgIGRpc3QgPSB1bml0czo6c2V0X3VuaXRzKDEwMCwgIm0iKSkKCmBgYApgYGB7ciBmaWcuaGVpZ2h0PTEyLCBmaWcud2lkdGg9MTV9CmxpYnJhcnkodG1hcCkKCm1ham9yX3N0cmVldHMgPC0gc3RyZWV0cyB8PiAgZmlsdGVyKENMQVNTICE9ICJNSU5PUiBBUlRFUklBTCIsCiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSAiUkFNUCIsCiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSAiUFJJVkFURSIsCiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSAiV0FMS1dBWSIsCiAgICAgICAgICAgICAgICAgICBDTEFTUyAhPSAiUEFQRVIiLAogICAgICAgICAgICAgICAgICAgQ0xBU1MgIT0gIkNBRCBPTkxZIikKCnRtYXBfbW9kZSgidmlldyIpCgp0bV9iYXNlbWFwKCJFc3JpLldvcmxkSW1hZ2VyeSIpICsKICB0bV9zaGFwZShtYWpvcl9zdHJlZXRzKSArIHRtX2xpbmVzKCJDTEFTUyIpICsKICB0bV9zaGFwZShtdl9zdCkgKyB0bV9kb3RzKCkKYGBgCgo=</div>
 
 
 
@@ -1838,7 +1894,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("Processing.Rmd");
+  window.initializeSourceEmbed("AssigningStreetnames.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>

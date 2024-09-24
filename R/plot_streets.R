@@ -10,8 +10,7 @@
 #' @export
 #'
 plot_streets <- function(streets, classes) {
-  library(magrittr)
-  dplyr::filter(streets, CLASS %in% classes) %>% ggplot2::ggplot() +
+  dplyr::filter(streets, CLASS %in% classes) |>  ggplot2::ggplot() +
     ggplot2::geom_sf(
       ggplot2::aes(color = CLASS)
     ) +

@@ -3,12 +3,12 @@
 #' Expects a streets shapefile with line features
 #'
 #' @param filename Streets shape file
+#' @param layer what layer to pull from
 #'
 #' @return sf object
 #' @export
 get_streets <- function(filename = here::here("../data/STREETS 2/STREETS.shp"), layer = "STREETS") {
-  library(sf)
-  library(dplyr)
+
   streets <- sf::st_read(filename, layer = layer)
 
   # Put CRS into internal environment
@@ -16,7 +16,7 @@ get_streets <- function(filename = here::here("../data/STREETS 2/STREETS.shp"), 
   the$CRS <- sf::st_crs(streets)$input
 
   streets |>
-    select(street_prefix = PREFIX,
+    dplyr::select(street_prefix = PREFIX,
            street_name = NAME,
            street_type = TYPE,
            street_suffix = SUFFIX,

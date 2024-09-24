@@ -26,7 +26,7 @@ read_mvc_data <- function(filename = here::here("../data/MVCs_Export.csv")) {
                                                           ))
 
   # Fix NA values in datetimes
-  df <- df %>% dplyr::mutate(dplyr::across(dplyr::ends_with("_datetime"),
+  df <- df |> dplyr::mutate(dplyr::across(dplyr::ends_with("_datetime"),
                                  ~ replace(.x,
                                           .x %in% c("Not Applicable",
                                                    "Not Recorded",
@@ -34,7 +34,7 @@ read_mvc_data <- function(filename = here::here("../data/MVCs_Export.csv")) {
                                           NA)))
 
   # Convert datetimes
-  df <- df %>% dplyr::mutate(dplyr::across(dplyr::ends_with("_datetime"),
+  df <- df |> dplyr::mutate(dplyr::across(dplyr::ends_with("_datetime"),
                                              ~lubridate::parse_date_time(.x,
                                                                          c("mdY IMSp",
                                                                            "mdY IMp"
@@ -44,7 +44,7 @@ read_mvc_data <- function(filename = here::here("../data/MVCs_Export.csv")) {
 
 
   # Add intervals
-  df <- df %>%
+  df <- df |>
     dplyr::mutate(call_to_onscene_interval = int_len(psap_datetime, onscene_datetime),
                   scenetime_interval = int_len(onscene_datetime, transport_datetime),
                   transport_interval = int_len(transport_datetime, atdest_datetime),
@@ -53,11 +53,11 @@ read_mvc_data <- function(filename = here::here("../data/MVCs_Export.csv")) {
                   )
 
   # Remove outlier/wrong intervals; adjust intervals that are within 60 seconds up to 0.
-  df <- df %>%
+  df <- df |>
     dplyr::mutate(dplyr::across(dplyr::ends_with("_interval"),
                                 ~ replace(.x,
                                           .x < -60,
-                                          NA))) %>%
+                                          NA))) |>
     dplyr::mutate(dplyr::across(dplyr::ends_with("_interval"),
                                 ~ replace(.x,
                                           .x < 0,
@@ -72,7 +72,8 @@ read_mvc_data <- function(filename = here::here("../data/MVCs_Export.csv")) {
 #'
 #' See the specifications for `lubridate::interval`
 #'
-#' @param start, end Date times
+#' @param start Date times
+#' @param end Date times
 #'
 #' @return duration in seconds
 int_len <- function(start, end) {

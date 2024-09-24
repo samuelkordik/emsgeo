@@ -8,13 +8,13 @@ library(sf)
 
 mvcs <- read_csv(here::here("data/MVCs_Export.csv"))
 
-mvcs %>% filter(!is.na(`Scene GPS Latitude Encoded (eScene.11)`)) %>% head()
+mvcs |>  filter(!is.na(`Scene GPS Latitude Encoded (eScene.11)`)) |>  head()
 
 ```
 ```{r}
 streets <- st_read(here::here("data/STREETS 2/STREETS.shp"), layer = "STREETS")
 
-streets %>% filter(CLASS != "MINOR ARTERIAL",
+streets |>  filter(CLASS != "MINOR ARTERIAL",
                    CLASS != "RAMP",
                    CLASS != "PRIVATE",
                    CLASS != "WALKWAY",
@@ -28,7 +28,7 @@ streets %>% filter(CLASS != "MINOR ARTERIAL",
 
 ```
 ```{r}
-mvcs_loc <- mvcs %>% filter(!is.na(`Scene GPS Latitude Encoded (eScene.11)`),!is.na(`Scene GPS Longitude Encoded (eScene.11)`)) %>% 
+mvcs_loc <- mvcs |>  filter(!is.na(`Scene GPS Latitude Encoded (eScene.11)`),!is.na(`Scene GPS Longitude Encoded (eScene.11)`)) %>% 
   select(response_number = `Response EMS Response Number (eResponse.04)`, 
          incident_datetime = `Incident Date Time`, 
          latitude = `Scene GPS Latitude Encoded (eScene.11)`, 
@@ -39,10 +39,10 @@ mv_st <- st_as_sf(mvcs_loc, agr = c(response_number = 'identity',
                   coords = c("latitude", "longitude"),
                   crs = "EPSG:2276")
 
-mv_st %>% ggplot() + geom_sf()
+mv_st |>  ggplot() + geom_sf()
 ```
 ```{r}
-streets %>% filter(CLASS != "MINOR ARTERIAL",
+streets |>  filter(CLASS != "MINOR ARTERIAL",
                    CLASS != "RAMP",
                    CLASS != "PRIVATE",
                    CLASS != "WALKWAY",
@@ -57,7 +57,7 @@ streets %>% filter(CLASS != "MINOR ARTERIAL",
   coord_sf()
 ```
 ```{r}
-mv_st_slice <- mv_st %>% head(100)
+mv_st_slice <- mv_st |>  head(100)
 
 merged <- st_join(mv_st_slice,
                   st_buffer(streets, dist = 100, endCapStyle = "FLAT"),
@@ -68,7 +68,7 @@ merged <- st_join(mv_st_slice,
 ```{r fig.height=12, fig.width=15}
 library(tmap)
 
-major_streets <- streets %>% filter(CLASS != "MINOR ARTERIAL",
+major_streets <- streets |>  filter(CLASS != "MINOR ARTERIAL",
                    CLASS != "RAMP",
                    CLASS != "PRIVATE",
                    CLASS != "WALKWAY",

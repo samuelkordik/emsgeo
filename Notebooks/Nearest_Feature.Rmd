@@ -19,7 +19,7 @@ incidents_sf <- incidents_as_sf(mvcs, coords = mvc_coords)
 
 tic()
 processed <- sf::st_join(
-  incidents_as_sf(mvcs, coords = mvc_coords) %>% sf::st_transform(crs = epsg_crs), 
+  incidents_as_sf(mvcs, coords = mvc_coords) |>  sf::st_transform(crs = epsg_crs), 
   streets, 
   join = sf::st_nearest_feature)
 toc()

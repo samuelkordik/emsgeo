@@ -6,12 +6,12 @@
 #' @param sf_incidents MVCs, as sf
 #' @param streets Streets sf object
 #'
-#' @return
+#' @return Returns dataframe with spatial data joined in.
 #' @export
 #'
 merge_mvcs_streets <- function(sf_incidents, streets) {
   epsg_crs <- sf::st_crs(streets)$epsg
-  sf::st_join(sf_incidents %>% sf::st_transform(crs = epsg_crs),
+  sf::st_join(sf_incidents |>  sf::st_transform(crs = epsg_crs),
               streets,
               join = sf::st_nearest_feature)
 }

@@ -13,7 +13,6 @@
 #'
 #'
 join_incidents_streets <- function(sf_incidents, streets, distance, distance_units) {
-  library(magrittr)
 
   sf::st_join(sf_incidents,
                         streets,
